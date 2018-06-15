@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Tree</title>
+	<link rel="stylesheet" href="LTtree.css">
+	<link rel="stylesheet" href="font/iconfont.css">
+</head>
+<body>
+	<div id="tree"></div>
+
+	<script src="treeData.js"></script>
+	<script src="LTtree.js"></script>
+	<script>
+		$_$Tree({
+			container: document.getElementById('tree'),
+			data: data,
+			callback: function(data) {
+				console.log('选择', data);
+			},
+			expand: function(data) {
+				console.log('展开', data);
+				// return [{C: [{N: 'aaa'}], N: '11111111111'}]
+			},
+			fold: function() {
+				console.log('折叠');
+			}
+		});
+
+	</script>
+</body>
+</html>
