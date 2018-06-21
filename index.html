@@ -16,18 +16,8 @@
 	<script>
 		$_$Tree({
 			container: document.getElementById('tree'),
-			data: data,
-			callback: function(data) {
-				console.log('选择', data);
-			},
-			expand: function(data) {
-				console.log('展开', data);
-				// return [{C: [{N: 'aaa'}], N: '11111111111'}]
-			},
-			fold: function() {
-				console.log('折叠');
-			}
-		});
+			data: data2
+		}).update(data);
 
 	</script>
 </body>
