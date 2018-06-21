@@ -3,20 +3,18 @@
 
 ### 使用实例
 ```javascript
-	
 	var tree = $_$Tree({
 		container: document.getElementById('tree'),  //DOM   加载树结构的dom节点
 		data: data  //树结构数据
 	});
 
 	tree.update(otherTreeData);
-
 ``` 
 ### 配置参数
 | param        | type          |  default                   |   need   | description                                                  |
 |  :----:      |  :----:       |  :----:                    |  :----:  |  :----:                                                      | 
 | container    | DOM           |   null                     |   true   | 加载树结构的dom节点                                            |
-| data         | Array/Object  |   null                     |   true   | 渲染的树结构数据, 如何是Object类型，那么树数据的字段必须为data     |           |
+| data         | Array/Object  |   null                     |   true   | 渲染的树结构数据, 如果是Object类型，那么树数据的字段必须为data     |           |
 | level        | [a,b,c,d...]  |   null                     |   false  | 想要渲染到的层级                                               |
 | arguConfig   | Object        | {name: "N", children: "C"} |   false  | 配置显示内容的字段和子级数据的字段                               | 
 | callback     | Function      |   null                     |   false  | 点击"树枝"的回调函数                                           |

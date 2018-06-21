@@ -1,8 +1,8 @@
 /*
  * @Author: Terence 
  * @Date: 2018-03-27 15:18:11 
- * @Last Modified by: Terence
- * @Last Modified time: 2018-06-13 12:42:13
+ * @Last Modified by:   Terence
+ * @Last Modified time: 2018-06-21 11:16:22
  */
 
  /**
@@ -37,7 +37,7 @@
 		this.isSingle = (!params.way || params.way === 'single') ? true : false;     //设置是 单项选择 还是 范围选择
 		this.cb = params.callback;
 		this.aKey = [];
-		this.arguConfig = params.arguConfig ? params.arguConfig : { name: "N", children: "C" };
+		this.arguConfig = params.arguConfig ? params.arguConfig : { name: "name", children: "children" };
 		this.data = params.data;
 		this.expand = params.expand;
 		this.fold = params.fold;

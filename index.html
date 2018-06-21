@@ -16,8 +16,16 @@
 	<script>
 		$_$Tree({
 			container: document.getElementById('tree'),
-			data: data2
-		}).update(data);
+			data: data,
+			arguConfig: {
+				name: 'N',
+				children: 'C'
+			},
+			level: 'b',
+			callback: function(data) {
+				console.log(data);
+			}
+		});
 
 	</script>
 </body>
