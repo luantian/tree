@@ -1,6 +1,7 @@
 # tree 树组件
 ### 一个原生js编写的渲染树状数据结构的组件
 | param        | type          |  default                   |   need   | description                     |
+| --------     | -----:        |  :----:                    |
 | container    | DOM           |   null                     |   true   | 加载树结构的dom节点               |
 | data         | Array/Object  |   null                     |   true   | 渲染的树结构数据                  |
 | level        | [a,b,c,d...]  |   null                     |   false  | 想要渲染到的层级                  |
