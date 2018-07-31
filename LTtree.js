@@ -1,8 +1,8 @@
 /*
  * @Author: Terence 
  * @Date: 2018-03-27 15:18:11 
- * @Last Modified by:   Terence
- * @Last Modified time: 2018-06-21 11:16:22
+ * @Last Modified by: Terence
+ * @Last Modified time: 2018-07-13 18:33:27
  */
 
  /**
@@ -17,9 +17,9 @@
   * @param {Function} fold 每次折叠时执行的方法
   * @param {String} stopKey 树数据中遇到此属性，停止向下渲染
   * @param {Array} eteKey 固定返回属性
+  * @param {Boolean} isShowCheckbox 是否显示复选框
   * 
-  * 
-  * {$_$Tree, update} 为外部可调用方法，其他禁止外部使用
+  * {$_$Tree, update, showCheckBox, hideCheckBox, cancelCheck} 为外部可调用方法，其他禁止外部使用
   * 
   * @return $_$Tree
   * 
@@ -37,16 +37,18 @@
 		this.isSingle = (!params.way || params.way === 'single') ? true : false;     //设置是 单项选择 还是 范围选择
 		this.cb = params.callback;
 		this.aKey = [];
-		this.arguConfig = params.arguConfig ? params.arguConfig : { name: "name", children: "children" };
+		this.arguConfig = params.arguConfig || { name: "name", children: "children" };
 		this.data = params.data;
 		this.expand = params.expand;
 		this.fold = params.fold;
 		this.stopKey = params.stopKey;
 		this.eteKey = params.eteKey;
+		this.isShowCheckbox = params.isShowCheckbox || false; //控制是否显示checkbox 
 		this.temp;                          //保存上一次选中的节点
 		this.queryData = {};
 		/********************  在上处定义 全局变量  ******************/
-	
+		this.checkedAll = false;				//控制是否全部选中，初始化时只能为false，因为初始化时还未出现选择框
+		this.boxData = [];						//保存多选的数据
 		this.init(this.data);
 	}
 	
@@ -78,14 +80,43 @@
 	 */
 	Tree.prototype.update = function(data) {
 		var r = this.formatData(data);
-		var d = r.data;
+		this.data = r.data;
 		if (!r.result) {
 			return console.warn(r.msg);
 		}
-		var str = '<div gmTree="gm_tree"></div>';
+		var str = '<div gmTree="gm_tree" showCheckBox="'+ !!this.isShowCheckbox +'"></div>';
 		this.wrap.innerHTML = str;
 		var oGm_tree = this.wrap.querySelector('[gmTree="gm_tree"]');
-		this.render(oGm_tree, d, 'a');
+		this.render(oGm_tree, this.data, 'a');
+	}
+
+	Tree.prototype.showCheckBox = function() {
+		this.isShowCheckbox = true;
+		this.setCheckAll(false);
+		this.boxData = [];
+	}
+
+	Tree.prototype.hideCheckBox = function() {
+		this.isShowCheckbox = false;
+		this.setCheckAll(false);
+		this.boxData = [];
+	}
+
+	Tree.prototype.cancelCheck = function(id) {
+		var dom = this.wrap.querySelector('[____id="'+ id +'"]');
+		//取消选中操作
+		dom.parentNode.querySelector('[gm_act="toggleChecked"]').setAttribute('checked', 'false');
+		for (var i = 0; i < this.boxData.length; i++) {
+			if (this.boxData[i].id == id) {
+				this.boxData.splice(i, 1);
+			}
+		}
+	}
+
+	Tree.prototype.setCheckAll = function(bool) {
+		bool && this.isShowCheckbox && (this.checkedAll = bool);
+		!bool && (this.checkedAll = bool);
+		this.update(this.data);
 	}
 	
 	/**
@@ -136,7 +167,7 @@
 	 * 
 	 * @param {DOM} parent 要渲染到的父亲节点
 	 * @param {JSON} data 要渲染的数据
-	 * @param {string} index ['a' ,'b'...] 要渲染的层级
+	 * @param {string} index ['a' ,'b' ...] 要渲染的层级
 	 * 
 	 */
 	Tree.prototype.render = function(parent, data, index) {
@@ -218,7 +249,7 @@
 				 * gm_act="onOff"  用来切换关闭隐藏
 				 * on="none"  表示没有子数据了
 				 */
-				str += '<div gmIndex="'+ index +'" qw="'+ fQw + (index + i) +'"><span gm_act="onOff" on="'+ isF +'"></span><span gmTree="gm_title" gm_act="selected"'+ sProp +'">'+ N +'</span></div>';
+				str += '<div gmIndex="'+ index +'" qw="'+ fQw + (index + i) +'"><div gm_act="toggleChecked" gmCheckbox checked="'+  this.checkedAll +'"><a gm_act="toggleChecked"></a></div><span gm_act="onOff" on="'+ isF +'"></span><span gmTree="gm_title" gm_act="selected"'+ sProp +'>'+ N +'</span></div>';
 			}
 			parent.innerHTML += str;
 		} else {
@@ -275,9 +306,43 @@
 					console.warn('没有下级节点了');
 				}
 				break;
+			case "toggleChecked":
+				if (target.getAttribute('gmcheckbox') == null) {
+					target = target.parentNode;
+				}
+				var attr = target.getAttribute('checked');
+				var selectedDOM = target.parentNode.querySelector('[gm_act="selected"]');
+				// console.log(selectedDOM);
+				var ret = this.getReKey(selectedDOM, this.aKey);
+				if (this.queryData[qw]) {
+					if ((this.eteKey && ('C' in this.eteKey)) || !this.eteKey) {
+						ret[this.arguConfig.children] = this.queryData[qw];
+					}
+				}
+				if (attr == 'true') {
+					//取消选中操作
+					target.setAttribute('checked', 'false');
+					for (var i = 0; i < this.boxData.length; i++) {
+						if (this.boxData[i].id == ret.id) {
+							this.boxData.splice(i, 1);
+						}
+					}
+				} else {
+					//选中操作
+					this.boxData.push(ret);
+					target.setAttribute('checked', 'true');
+				}
+				this.cb && this.cb(this.boxData);
+				break;
 			case "selected":
 				//单点击选择 或 范围选择（点击两次）    仅实现单选
-	
+
+				if(this.isShowCheckbox){//如果为多选 则点击选择 模拟调用勾选
+					var selectedDOM = $$('[gmcheckbox]',target.parentNode)[0];
+					selectedDOM&&selectedDOM.click();
+					return ;
+				}
+
 				//记录点击节点，在下次点击的时候清空上一点击节点的active，并记录本次点击节点
 				var parent = target.parentNode;
 				if (this.temp) {
@@ -334,5 +399,4 @@
 	} else {
 		window.$_$Tree = $_$Tree;
 	}
-	
 })();

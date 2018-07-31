@@ -3,19 +3,30 @@
 	font-size: .7rem;
 }
 
+[gmTree="gm_tree"][showCheckbox="true"] [gmcheckbox] {
+	display: block;
+}
+
+[gmTree="gm_tree"][showCheckbox="false"] [gmcheckbox] {
+	display: none;
+}
+
 [gm_act="onOff"] {
 	display: block;
-	width: 1.5rem;
+	width: 1rem;
+	height: 1rem;
 	line-height: 1.7rem;
 	text-align: center;
 	position: absolute;
-	top: 0;
-	bottom: 0;
+	top: .4rem;
+	left: 1rem;
+	/* bottom: 0; */
+	/* background: red; */
 	cursor: pointer;
 }
 [gmTree="gm_title"] {
 	display: block;
-	padding: .2rem 0 .2rem 1.5rem;
+	padding: .4rem 0 .4rem 2rem;
 	cursor: pointer;
 }
 
@@ -59,7 +70,7 @@
 [gmIndex="y"],
 [gmIndex="z"]
 {
-	padding-left: .9rem;
+	margin-left: .9rem;
 }
 
 [gmIndex] span[on="false"]::after {
@@ -71,8 +82,8 @@
 	border-left: .3rem solid #777;
 	border-bottom: .3rem solid transparent;
 	position: relative;
-	left: .8rem;
-	top: .4rem;
+	left: .4rem;
+    top: .25rem;
 }
 
 [gmIndex].active > span[on="false"]::after {
@@ -92,8 +103,8 @@
 	border-right: .3rem solid transparent;
 	border-top: .3rem solid #777;
 	position: relative;
-	left: .55rem;
-	top: .7rem;
+	left: .2rem;
+	top: .4rem;
 }
 
 [gmIndex].active > span[on="true"]::after {
@@ -104,15 +115,74 @@
 	display: block;
 }
 
+[gmIndex] span[on="none"] {
+	width: .5rem;
+	height: .5rem;
+	line-height: .5rem;
+	/* background: green; */
+	/* left: -.2rem; */
+}
+
 [gmIndex] span[on="none"]::after {
+	display: block;
+	width: 1rem;
+	height: .5rem;
 	font-size: 2rem;
 	content: "·";
 	cursor: pointer;
-	position: relative;
-	left: .1rem;
-	top: -.1rem;
+	/* background: yellow; */
+	position: absolute;
+	top: .2rem;
+    left: -.1rem;
 }
 
 [gmIndex].active > span[on="none"]::after {
 	color: #0074cd;
+}
+
+[gmCheckbox] {
+	width: 0.7rem;
+    height: 0.7rem;
+    line-height: 0.7rem;
+    text-align: center;
+    position: absolute;
+    top: .48rem;
+    left: .03rem;
+    overflow: hidden;
+    background: #fff;
+    z-index: 2;
+	cursor: pointer;
+	border: 1px solid #ddd;
+	border-radius: .2rem;
+}
+
+[gmCheckbox] a {
+	width: .3rem;
+	height: .1rem;
+	line-height: .7rem;
+	background: #fff;
+	position: relative;
+	left: .1rem;
+	font-size: .5rem;
+}
+[gmCheckbox] a:after{
+	content: '\e697';
+	font-family: icon;
+	display:block;
+	width: .4rem;
+	height: .1rem;
+	color: #fff;
+}
+
+[gmCheckbox][checked="true"] {
+	background: #40D28F;
+	border: 1px solid #fff;
+}
+
+[gmCheckbox][checked="true"] ~ [gm_act="selected"] {
+	color: #0074cd;
+}
+
+[gmCheckbox][checked="false"] a {
+	display: none;
 }

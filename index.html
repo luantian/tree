@@ -9,24 +9,45 @@
 	<link rel="stylesheet" href="font/iconfont.css">
 </head>
 <body>
+
+	<button id="showBtn">显示</button>
+	<button id="hideBtn">隐藏</button>
+	<button id="checkAll">选中全部</button>
+	<button id="uncheckAll">取消选中全部</button>
 	<div id="tree"></div>
 
+	
 	<script src="treeData.js"></script>
 	<script src="LTtree.js"></script>
 	<script>
-		$_$Tree({
+		var a = $_$Tree({
 			container: document.getElementById('tree'),
 			data: data,
 			arguConfig: {
 				name: 'N',
 				children: 'C'
 			},
-			level: 'b',
 			callback: function(data) {
 				console.log(data);
 			}
 		});
 
+		var showBtn = document.querySelector('#showBtn');
+		var hideBtn = document.querySelector('#hideBtn');
+		var checkAllBtn = document.querySelector('#checkAll');
+		var uncheckAll = document.querySelector('#uncheckAll');
+		showBtn.onclick = function() {
+			a.showCheckBox();
+		}
+		hideBtn.onclick = function() {
+			a.hideCheckBox();
+		}
+		checkAllBtn.onclick = function() {
+			a.setCheckAll(true);
+		}
+		uncheckAll.onclick = function() {
+			a.setCheckAll(false);
+		}
 	</script>
 </body>
 </html>
